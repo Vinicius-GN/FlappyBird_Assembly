@@ -25,18 +25,20 @@ A estrutura do projeto é organizada da seguinte forma:
   ```bash
 📂 FlappyBirdAssembly
 │-- 📜 main_code.asm        # Código principal do jogo
-│-- 📜 main_code.mif        # Mapeamento de memória
+│-- 📜 main_code.mif        # Arquivo do jogo para rodar no simulador
+│-- 📜 charmap.mif          # Arquivo auxiliar para rodar o simulador
 │-- 📂 Personagem           # Código relacionado ao personagem
-│   ├── 📜 personagem.asm   # Controle e física do personagem
+│   ├── 📜 personagem.asm   # Descrição visual do personagem
+│   ├── 📜 personagem.png   # Descrição visual do personagem
 │-- 📂 Ferramentas          # Executáveis do montador e simulador
-│   ├── 📜 montador         # Arquivo de montagem
+│   ├── 📜 mont             # Compilador dos arquivos asm
 │   ├── 📜 sim              # Simulador para rodar o jogo
 │-- 📂 Images               # Recursos gráficos do jogo
 │   ├── 📜 Menu.png         # Tela principal
 │   ├── 📜 Tela_derrota.png # Tela de game over
 │   ├── 📜 game.jpeg        # Captura de tela do jogo em execução
-│-- 📂 assets               # Sprites, fontes e, se aplicável, áudio
-│-- 📜 Makefile             # Automação da compilação
+│-- 📂 CPU                  # Recursos para a implementação da CPU com a Unidade de Controle (UC) inclusaSimulador_Linux
+│-- 📂 Simulador_Linux      # Arquivos para o simulador e montador
 │-- 📜 README.md            # Documentação do projeto
   ```
 
@@ -64,30 +66,32 @@ A estrutura do projeto é organizada da seguinte forma:
   ```
 2. Compile o simulador:
   ```bash
-   cd simulador_fonte  
+   cd Simulador_Linux/simulador_fonte  
    sh compila.sh  
-   cp simulador ../Ferramentas/sim  
-   chmod +x ../Ferramentas/sim  
+   cp sim ../../Ferramentas/sim  
+   chmod +x ../../Ferramentas/sim  
+   cd ..
    cd ..
   ```
 
 3. Compile o montador:
   ```bash
-   cd montador_fonte  
+   cd Simulador_Linux/montador_fonte  
    gcc *.c -o montador  
-   cp montador ../Ferramentas/montador  
-   chmod +x ../Ferramentas/montador  
+   cp montador ../../Ferramentas/montador  
+   chmod +x ../../Ferramentas/montador  
+   cd ..
    cd ..
   ```
 
 4. Compile o código Assembly do jogo:
   ```bash
-   ./Ferramentas/montador main_code.asm -o main_code.mif
+   ./Ferramentas/montador main_code.asm main_code.mif
   ```
 
 5. Execute o jogo no simulador:
   ```bash
-   ./Ferramentas/sim main_code.mif charmap.mif
+   ./Ferramentas/sim charmap.mif main_code.mif
   ```
 ---
 
@@ -107,6 +111,14 @@ O jogo consiste em controlar o pássaro para que ele evite os obstáculos (semel
 - **`1 e 2`**: Seleção das opções no menu principal e na tela de derrota. 
 - **`ESPACO`**: Faz o pássaro subir (realiza o flap).
 
+<p align="center">
+  <img src="Personagem/personagem.png" alt="Tela de Derrota do Jogo" width="200">
+</p>
+<p align="center">
+  <img src="Images/game.jpeg" alt="Tela de Derrota do Jogo" width="600">
+</p>
+
+
 ### Funcionamento Durante o Jogo:
 - **Pontuação:** Cada obstáculo ultrapassado incrementa a pontuação.
 - **Colisões:** Se o pássaro colidir com um obstáculo, o jogo é finalizado e a **Tela de Derrota** é exibida.
@@ -120,7 +132,7 @@ O jogo consiste em controlar o pássaro para que ele evite os obstáculos (semel
 
 ## Link do Vídeo 🎥
 
-Assista à apresentação do projeto realizada por **Gabriel Barbosa dos Santos**:  
+Assista à apresentação do projeto:  
 [Assista aqui]()
 
 ---
