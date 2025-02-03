@@ -45,7 +45,10 @@ A CPU implementada possui os seguintes componentes principais:
 
 A estrutura do projeto é organizada da seguinte forma:
   ```bash
-📂 CPU_VHDL_Project │-- 📜 cpu.vhd # Implementação principal da CPU em VHDL │-- 📜 ula.vhd # Implementação da Unidade Lógica e Aritmética (ULA) │-- 📜 registradores.vhd # Banco de registradores do processador │-- 📜 controle.vhd # Máquina de controle do processador │-- 📂 DE0_CV # Arquivos para simulação no Quartus │ ├── 📜 DE0_CV.qpf # Projeto Quartus │ ├── 📜 DE0_CV.qsf # Arquivo de configuração do Quartus │ ├── 📜 testbench.vhd # Arquivo de testbench para simulação │-- 📂 Docs # Documentação e materiais de referência │ ├── 📜 instrucoes.pdf # Manual com as instruções da CPU │ ├── 📜 arquitetura.pdf # Especificações da arquitetura │-- 📜 README.md # Este arquivo
+📂 CPU
+│-- 📂 DE0_CV # Arquivos para simulação no Quartus
+│-- 📜 cpu.vhd # Implementação principal da CPU em VHDL
+│-- 📜 README.md # Documentação do projeto
   ```
 
 
@@ -61,9 +64,10 @@ Para rodar o projeto, você precisará:
 
 ### 2️⃣ **Passos para Instalação**
 1. Clone o repositório e entre no diretório do projeto:
-
+  ```bash
    git clone https://github.com/SeuUsuario/CPU_VHDL_Project.git  
    cd CPU_VHDL_Project/
+  ```
 
 2. Abra o Quartus e carregue o projeto:
 
@@ -85,17 +89,7 @@ Para rodar o projeto, você precisará:
 
 ## Materiais de Referência 📚
 
-📌 **Arquivos disponíveis na pasta `/Docs`**
-- **`instrucoes.pdf`** → Lista de instruções suportadas pelo processador.
-- **`arquitetura.pdf`** → Especificações da CPU e sua organização interna.
-
 📌 **Links Úteis**
 - [Documentação do Quartus Prime](https://www.intel.com/content/www/us/en/software/programmable/quartus-prime/overview.html)
 - [Introdução ao VHDL](https://www.nandland.com/vhdl/)
 - [Simulação com ModelSim](https://www.intel.com/content/www/us/en/software/programmable/quartus-prime/model-sim.html)
-
----
-
-🚀 **Agora sua CPU está pronta para ser testada e melhorada!**  
-Caso tenha sugestões ou encontre bugs, contribuições são bem-vindas via **Issues** ou **Pull Requests**.
-
