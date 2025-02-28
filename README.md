@@ -91,7 +91,7 @@ A estrutura do projeto é organizada da seguinte forma:
 
 5. Execute o jogo no simulador:
   ```bash
-   ./Ferramentas/sim charmap.mif main_code.mif
+   ./Ferramentas/sim main_code.mif charmap.mif
   ```
 ---
 
