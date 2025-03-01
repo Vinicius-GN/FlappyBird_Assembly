@@ -3787,12 +3787,14 @@ derrota : var #1200
 
 ;; ---------------------- Definição de obstáculos e do personagem ----------------------
 
-personagem : var #5
-  static personagem + #0, #2139 ;  [ (cabeça)
-  static personagem + #1, #539  ;  |
-  static personagem + #2, #2141 ;  ] (corpo)
-  static personagem + #3, #3614 ;  |
-  static personagem + #4, #797  ;  -
+Persona : var #2
+  static Persona + #0, #96 ;   `
+  static Persona + #1, #44 ;   ,
+
+PersonaGaps : var #2
+  static PersonaGaps + #0, #0
+  static PersonaGaps + #1, #0
+
 
 
 cima : var #34
@@ -4532,27 +4534,40 @@ SubtractPos:
 
   jmp MovePersonagem_End
 
+
 desenharPersonagem:
   push R0
   push R1
   push R2
   push R3
   push R4
+  push R5
+  push R6
 
-  loadn R0, #personagem  ; Endereço do sprite do personagem
-  load R1, posPassaro   ; Posição na tela
-  loadn R2, #5          ; Tamanho do personagem
-  loadn R3, #0          ; Índice do loop
+  loadn R0, #Persona
+  loadn R1, #PersonaGaps
+  load R2, posPassaro
+  loadn R3, #2 ;tamanho Persona
+  loadn R4, #0 ;incremetador
 
-desenharPersonagemLoop:
-  add R4, R0, R3
-  loadi R4, R4
-  outchar R4, R1
-  inc R1
-  inc R3
-  cmp R3, R2
-  jne desenharPersonagemLoop
+  printPersonaLoop:
+    add R5,R0,R4
+    loadi R5, R5
 
+    add R6,R1,R4
+    loadi R6, R6
+
+    add R2, R2, R6
+
+    outchar R5, R2
+
+    inc R2
+     inc R4
+     cmp R3, R4
+    jne printPersonaLoop
+
+  pop R6
+  pop R5
   pop R4
   pop R3
   pop R2
@@ -4564,17 +4579,31 @@ apagarPersonagem:
   push R0
   push R1
   push R2
+  push R3
+  push R4
+  push R5
 
-  loadn R0, #32  ; Código ASCII de espaço (' ') para apagar
-  load R1, posAntPassaro ; Carrega a posição anterior
-  loadn R2, #5   ; Tamanho do personagem (5 caracteres)
+  loadn R0, #3967
+  loadn R1, #PersonaGaps
+  load R2, posAntPassaro
+  loadn R3, #2 ;tamanho Persona
+  loadn R4, #0 ;incremetador
 
-apagarPersonagemLoop:
-  outchar R0, R1
-  inc R1
-  dec R2
-  jnz apagarPersonagemLoop
+  apagarPersonaLoop:
+    add R5,R1,R4
+    loadi R5, R5
 
+    add R2,R2,R5
+    outchar R0, R2
+
+    inc R2
+     inc R4
+     cmp R3, R4
+    jne apagarPersonaLoop
+
+  pop R5
+  pop R4
+  pop R3
   pop R2
   pop R1
   pop R0
@@ -4677,6 +4706,12 @@ DetectaColisao:
   div R5, R0, R6         ; R5 = posPassaro // 40
   inc R5                 ; R5 = (posPassaro // 40) + 1
 
+  ;; ------------------------ Verificar colisão com o chão------------------------------------
+
+  loadn R7, #28
+  cmp R5, R7
+  jeq rotinaDerrota
+
   ;; ------------------------ Verificar colisão com o obstáculo superior ------------------------
 
   ;; Cálculo da altura do obstáculo superior: (2 + tamCima)
@@ -4742,15 +4777,12 @@ rotinaDerrota:
 
   call ExibirScore      ; Mostra o score final
 
-  loadn R0, #0
-  store score, R0
-
   pop R0
 
   call keyboard         ; Aguarda entrada do jogador
   loadn R1, #'1'        ; Se pressionar '1', reinicia o jogo
   cmp R3, R1
-  jeq startGame
+  jeq DeletePoints
 
   loadn R1, #'2'        ; Se pressionar '2', volta ao menu
   cmp R3, R1
@@ -4760,6 +4792,12 @@ rotinaDerrota:
 
 
 ;; ------------------------------------Desenhar e apagar telas--------------------------------------------
+
+DeletePoints:
+  loadn R0, #0
+  store score, R0
+  jmp startGame
+
 
 ApagaTela:
   push R0
@@ -4934,4 +4972,5 @@ ExibirScoreLoop:
   pop R1
   pop R0
   rts
+
 
