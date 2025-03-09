@@ -133,7 +133,7 @@ O jogo consiste em controlar o pássaro para que ele evite os obstáculos (semel
 ## Link do Vídeo 🎥
 
 Assista à apresentação do projeto:  
-[Assista aqui]()
+[Assista aqui](https://www.youtube.com/watch?v=LST4KJSebKg)
 
 ---
 
