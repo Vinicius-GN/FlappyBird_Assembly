@@ -4149,6 +4149,10 @@ TamPrintBaixo: var #1
 PosInicialBaixo: var #1 
 GenNum: var #1
 
+flagEspaco: var #1   ; 0 = sem comando pendente; 1 = pulo já processado
+flagGame: var #1
+
+
 ;; --------------------------Geração e randomização dos obstáculos--------------------------------------------
 
 DefinirObstaculos:
@@ -4296,10 +4300,6 @@ main:
     cmp R3, R5
     jeq startGame
 
-    loadn R5, #'2'  ; Se pressionar '2', fecha o jogo
-    cmp R3, R5
-    jeq end
-
     jmp menuLoop  ; Se não for '1' ou '2', continua aguardando entrada
 
   end:
@@ -4315,6 +4315,9 @@ startGame:
 
   loadn R0, #120              ; Define velocidade de subida (2 blocos)
   store velocidadeSubida, R0
+
+  loadn R0, #0
+  store flagEspaco, R0 
 
   loadn R0, #Mapa
   call prinMapa
@@ -4408,19 +4411,33 @@ keyboard: ;Retorna no registrador R3 o que foi lido do teclado
 
 ; ----------------------------Movimento de personagens, desenhar e apagar--------------------------------------------
 
+
+
 MovePersonagem:
   push R0
   push R1
   push R2
   push R3
+  push R4
+  push R5
 
   load R0, posPassaro        ; Carrega a posição atual do pássaro
   store posAntPassaro, R0    ; Salva a posição anterior antes de mover
 
   inchar R3                  ; Lê entrada do teclado (NÃO BLOQUEIA O LOOP)
-  loadn R2, #32              ; Código ASCII de espaço (' ')
+  loadn R2, #32          ; Código ASCII de espaço (' ')
   cmp R3, R2
-  jeq PuloPassaro            ; Se pressionar espaço, sobe
+  jeq PuloPassaro           ; Se pressionar espaço, sobe
+
+  jmp AplicarQueda
+
+Verificar_leitura: ;Se o botão foi apertado e o ultimo também não move o passaro
+  load R4, flagEspaco ;Carrega último valor lido
+  store flagEspaco, R3
+  cmp R4, R3
+  jeq AtualizaPassaro
+
+  jmp PuloPassaro
 
 AplicarQueda:
   load R1, velocidadeQueda   ; Carrega a velocidade de queda
@@ -4450,83 +4467,13 @@ AtualizaPassaro:
   call desenharPersonagem
 
 MovePersonagem_End:
-  pop R3
-  pop R2
-  pop R1
-  pop R0
-  rts
-
-
-AplicarGravidade:
-  load R1, velocidadeQueda   ; Carrega a velocidade de queda
-  add R0, R0, R1             ; Atualiza a posição somando a velocidade
-
-  ; Verifica se o pássaro bateu no chão (limite inferior)
-  loadn R2, #1080            ; Supondo que 1080 seja o chão
-  cmp R2, R0
-  jle MovePersonagem_End     ; Se R2 <= R0, significa que chegou no chão, então para
-
-  jmp AtualizaPassaro
-
-PuloPassaro:
-  load R1, velocidadeSubida  ; Carrega a velocidade de subida
-  sub R0, R0, R1             ; Atualiza a posição subtraindo a velocidade de subida
-
-  ; Verifica se o pássaro bateu no teto (limite superior)
-  loadn R2, #119             ; Supondo que 119 seja o teto
-  cmp R0, R2
-  jle AtualizaPassaro         ; Se R0 <= 119, pode atualizar
-
-  jmp MovePersonagem_End      ; Se passou do limite, para
-
-AtualizaPassaro:
-  store posPassaro, R0        ; Salva a nova posição do pássaro
-  call apagarPersonagem
-  call desenharPersonagem
-
-MovePersonagem_End:
+  pop R5
   pop R4
   pop R3
   pop R2
   pop R1
   pop R0
   rts
-
-
-AplicarGravidade:
-  loadn R1, #40         ; Define o valor da queda
-  add R0, R0, R1        ; Atualiza a posição somando 40 (cai)
-
-  ; Verifica se o pássaro bateu no chão (limite inferior)
-  loadn R2, #1080       ; Supondo que 1080 seja o chão (ajuste conforme necessário)
-  cmp R2, R0            ; Compara limite com posição do pássaro
-  jle MovePersonagem_End ; Se R2 <= R0, significa que chegou no chão, então para
-
-  jmp AtualizaPassaro
-
-PuloPassaro:
-  loadn R1, #40         ; Define o valor da subida
-  sub R0, R0, R1        ; Atualiza a posição subtraindo 40 (sobe)
-
-  ; Verifica se o pássaro bateu no teto (limite superior)
-  loadn R2, #119        ; Supondo que 119 seja o teto (ajuste conforme necessário)
-  cmp R0, R2            ; Compara posição do pássaro com limite do teto
-  jle AtualizaPassaro   ; Se R0 <= 119, pode atualizar
-
-  jmp MovePersonagem_End ; Se passou do limite, para
-
-AtualizaPassaro:
-  store posPassaro, R0   ; Salva a nova posição do pássaro
-  call apagarPersonagem
-  call desenharPersonagem
-
-MovePersonagem_End:
-  pop R3
-  pop R2
-  pop R1
-  pop R0
-  rts
-
 
 SubtractPos:
   loadn R1, #40         ; Define deslocamento
@@ -4779,6 +4726,7 @@ rotinaDerrota:
 
   pop R0
 
+pega_input:
   call keyboard         ; Aguarda entrada do jogador
   loadn R1, #'1'        ; Se pressionar '1', reinicia o jogo
   cmp R3, R1
@@ -4788,7 +4736,7 @@ rotinaDerrota:
   cmp R3, R1
   jeq main
 
-  jmp rotinaDerrota     ; Se não pressionou nada válido, espera de novo
+  jmp pega_input     ; Se não pressionou nada válido, espera de novo
 
 
 ;; ------------------------------------Desenhar e apagar telas--------------------------------------------
@@ -4972,5 +4920,3 @@ ExibirScoreLoop:
   pop R1
   pop R0
   rts
-
-
