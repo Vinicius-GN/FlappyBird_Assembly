@@ -115,7 +115,7 @@ O jogo consiste em controlar o pássaro para que ele evite os obstáculos (semel
   <img src="Personagem/personagem.png" alt="Tela de Derrota do Jogo" width="200">
 </p>
 <p align="center">
-  <img src="Images/game.jpeg" alt="Tela de Derrota do Jogo" width="600">
+  <img src="Images/game.png" alt="Tela de Derrota do Jogo" width="600">
 </p>
 
 
