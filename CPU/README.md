@@ -59,7 +59,6 @@ A estrutura do projeto é organizada da seguinte forma:
 ### 1️⃣ **Requisitos**
 Para rodar o projeto, você precisará:
 - **Quartus Prime** (Intel FPGA Software)
-- **ModelSim** (para simulação VHDL)
 - **Ambiente Linux ou Windows** com suporte para compilação VHDL
 
 ### 2️⃣ **Passos para Instalação**
@@ -81,9 +80,11 @@ Para rodar o projeto, você precisará:
 
 4. Simule o comportamento da CPU:
 
-   - Abra o **ModelSim**.  
-   - Carregue o arquivo de testbench (`DE0_CV/testbench.vhd`).  
+   - Abra o executador e selecione o USB correto da FPGA.  
+   - Tenha um arquivo .mif carregado na pasta do projeto com o nome "cpuram.mif" -> Pode ser o testacpu ou o seu jogo compilado.  
    - Execute a simulação para visualizar o funcionamento da CPU.
+   - Mude o monitor para VGA ao inves de HDMI para vizuaizar o jogo.
+   - Não se esqueça de conectar o teclado à FPGA para testar seu jogo na CPU
 
 ---
 
